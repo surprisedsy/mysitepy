@@ -57,20 +57,33 @@ def modifyform(request):
     return render(request, 'user/modifyform.html', data)
 
 def modify(request):
-    user = User.objects.filter(email=request.GET['email'])
+    # user = User.objects.filter(email=request.GET['email'])
+    #
+    # print(user[0])
+    #
+    # authemail = user[0]
+    # request.session['authemail'] = model_to_dict(authemail)
+    #
+    # change_pass = request.POST['password']
+    # change_gender = request.POST['gender']
+    #
+    # authemail.password = change_pass
+    # authemail.gender = change_gender
+    #
+    # authemail.save()
 
-    print(user[0])
+    result = User.objects.filter(id=request.GET['id'])
 
-    authemail = user[0]
-    request.session['authemail'] = model_to_dict(authemail)
+    authuser = result[0]
+    request.session['authuser'] = model_to_dict(authuser)
 
     change_pass = request.POST['password']
     change_gender = request.POST['gender']
 
-    authemail.password = change_pass
-    authemail.gender = change_gender
+    authuser.password = change_pass
+    authuser.gender = change_gender
 
-    authemail.save()
+    authuser.save()
 
     return HttpResponseRedirect('/user/modifyform')
 

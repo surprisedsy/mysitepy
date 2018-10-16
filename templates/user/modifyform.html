@@ -6,7 +6,7 @@
 {% block content %}
 			<div id="user">
 
-				<form id="join-form" name="joinForm" method="post" action="/user/modify?email={{ user.email }}">{% csrf_token %}
+				<form id="join-form" name="joinForm" method="post" action="/user/modify?id={{ user.id }}">{% csrf_token %}
 					<label class="block-label" for="name">이름</label>
 					<h4>{{ user.name }}</h4>
 
