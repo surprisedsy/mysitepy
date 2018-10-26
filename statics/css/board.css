@@ -39,13 +39,14 @@ input#kwd	{
 	border-bottom:2px solid #333;
 }
 
-.tbl-ex th, 
-.tbl-ex td	{ 
+.tbl-ex th,
+.tbl-ex td	{
 	padding:8px;
-	text-align:center; 	 
+	text-align:center;
 }
-	
-.tbl-ex th	{ 
+
+.tbl-ex th	{
+    text-align:center;
 	border-top:2px solid #333;
 	border-bottom:2px solid #333; 
 	background-color:#999; 

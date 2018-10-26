@@ -17,7 +17,6 @@ def join(request):
     user.password = request.POST["password"]
     user.gender = request.POST["gender"]
 
-    # models.insert((name, email, password, gender))
     user.save()
 
     return HttpResponseRedirect('/user/joinsuccess')
@@ -32,7 +31,6 @@ def login(request):
     # 객체 리턴
     results = User.objects.filter(email=request.POST["email"])\
         .filter(password=request.POST["password"])
-    # user = models.get(email, password)
 
     # 로그인 실패!!!!!
     if len(results) == 0:
@@ -57,21 +55,6 @@ def modifyform(request):
     return render(request, 'user/modifyform.html', data)
 
 def modify(request):
-    # user = User.objects.filter(email=request.GET['email'])
-    #
-    # print(user[0])
-    #
-    # authemail = user[0]
-    # request.session['authemail'] = model_to_dict(authemail)
-    #
-    # change_pass = request.POST['password']
-    # change_gender = request.POST['gender']
-    #
-    # authemail.password = change_pass
-    # authemail.gender = change_gender
-    #
-    # authemail.save()
-
     result = User.objects.filter(id=request.GET['id'])
 
     authuser = result[0]

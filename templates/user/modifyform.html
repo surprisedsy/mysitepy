@@ -1,8 +1,22 @@
 {% extends '../base.html' %}
 {% block css_link %}
 <link href="/assets/css/user.css" rel="stylesheet" type="text/css">
-{% endblock %}
+<script>
+$(function(){
+	$('#sbm-modify').change(function(){
+		console.log('비번 changed');
+		$('#sbm-modify').alert("수정 되었습니다.");
+	});
 
+	$('#sbm-modify').click(function(){
+		modify = $('#password').val();
+		if(password == ''){
+			return;
+		}
+	});
+});
+</script>
+{% endblock %}
 {% block content %}
 			<div id="user">
 
@@ -22,7 +36,7 @@
 						<label>남</label> <input type="radio" name="gender" value="male">
 					</fieldset>
 
-					<input type="submit" value="수정하기">
+					<input id="sbm-modify" type="submit" value="수정하기">
 					
 				</form>
 			</div>

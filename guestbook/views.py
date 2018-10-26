@@ -27,7 +27,6 @@ def add(request):
     guestbook.password = request.POST['password']
     guestbook.message = request.POST['message']
 
-    # models.insert((first_name, last_name, email))
     guestbook.save()
 
     return HttpResponseRedirect("/guestbook")

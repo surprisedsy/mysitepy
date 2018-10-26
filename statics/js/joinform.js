@@ -1,5 +1,4 @@
 $(function(){
-
 	$('#email').change(function(){
 		console.log('changed');
 		$('#btn-emailcheck').show();
@@ -22,7 +21,6 @@ $(function(){
 					$('#email').val('').focus();
 					return;
 				}
-
 				$('#btn-emailcheck').hide();
 				$('#img-emailcheck').show();
 			}
