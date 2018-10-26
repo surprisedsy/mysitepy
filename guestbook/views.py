@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 
 # Create your views here.
@@ -41,3 +41,23 @@ def delete(request):
     return HttpResponseRedirect("/guestbook")
 
 
+
+# =================== ajax ui 꾸미기
+
+def ajax(request):
+    return render(request, 'guestbook/ajax.html')
+
+def api_list(request):
+    p = request.GET['p']
+    page = (int(p)-1) * 3
+
+    result_list = []
+    results = Guestbook.objects.all().order_by('-id')[page:page+3]
+    result_dict = results.values()
+
+    for a in result_dict:
+        result_list.append(a)
+
+    data = {"results":result_list}
+
+    return JsonResponse(data)

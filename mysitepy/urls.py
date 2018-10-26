@@ -52,4 +52,7 @@ urlpatterns = [
     path('board/replyadd', board_views.replyadd),
     path('board/delete', board_views.delete),
 
+    path('guestbook/ajax', guestbook_views.ajax),
+    path('guestbook/api/list', guestbook_views.api_list),
+
 ]

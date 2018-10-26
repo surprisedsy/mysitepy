@@ -1,0 +1,72 @@
+{% extends '../base.html' %}
+{% block css_link %}
+<link href="/assets/css/guestbook.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="/assets/js/jquery/jquery-1.9.0.js"></script>
+<script>
+var page = 0;
+var isEnd = false;
+
+var render = function(guestbook){
+	var htmls = "<li><table>" +
+				"<tr><td></td><td>" + guestbook.name +
+				"</td><td>" + guestbook.date +
+				"</td><td><a href=''>삭제</a></td></tr>"+
+				"<tr><td colspan='4'>" + guestbook.message +
+				"<br></td></tr>" +
+				"</table><br></li>";
+	$("#message-list").append(htmls);
+};
+var fetchList = function(){
+	if(isEnd == true)
+		return;
+	++page;
+
+	$.ajax({
+		url: "/guestbook/api/list?p=" + page,
+		type: "get",
+		dataType: "json",
+		data: "",
+		success: function(response){
+			// rendering
+			$(response.results).each(function(index, guestbook){
+				render(guestbook);
+			});
+			// check isEnd
+			if(response.results.length < 3)
+				isEnd = true;
+				$("#btn-fetch").prop('disabled', true);
+		},
+		error: function(jqXHR, status, e){
+			console.error(status + ":" + e);
+		}
+	});
+}
+$(function(){
+	$("#btn-fetch").click(function(){
+		fetchList();
+	});
+});
+</script>
+{% endblock %}
+
+{% block content %}
+			<div id="guestbook">
+				<form action="mysite/guestbook" method="post">
+					<input type="hidden" name="a" value="insert">
+					<table>
+						<tr>
+							<td>이름</td><td><input type="text" name="name"></td>
+							<td>비밀번호</td><td><input type="password" name="pass"></td>
+						</tr>
+						<tr>
+							<td colspan=4><textarea name="message" id="content"></textarea></td>
+						</tr>
+						<tr>
+							<td colspan=4 align=right><input type="submit" VALUE=" 확인 "></td>
+						</tr>
+					</table>
+				</form>
+				<button id="btn-fetch">가져오기</button>
+				<ul id="message-list"></ul>
+			</div>
+{% endblock %}
