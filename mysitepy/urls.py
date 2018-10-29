@@ -54,5 +54,6 @@ urlpatterns = [
 
     path('guestbook/ajax', guestbook_views.ajax),
     path('guestbook/api/list', guestbook_views.api_list),
+    path('guestbook/api/add', guestbook_views.api_add),
 
 ]

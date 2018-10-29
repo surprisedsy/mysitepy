@@ -17,8 +17,9 @@ var render = function(guestbook){
 	$("#message-list").append(htmls);
 };
 var fetchList = function(){
-	if(isEnd == true)
+	if(isEnd == true){
 		return;
+	}
 	++page;
 
 	$.ajax({
@@ -32,41 +33,76 @@ var fetchList = function(){
 				render(guestbook);
 			});
 			// check isEnd
-			if(response.results.length < 3)
+			if(response.results.length < 5){
 				isEnd = true;
 				$("#btn-fetch").prop('disabled', true);
+			}
 		},
 		error: function(jqXHR, status, e){
 			console.error(status + ":" + e);
 		}
 	});
+
+	<!--console.log("position 1");		// 현재 비 동기 통신으로 진행중.-->
 }
 $(function(){
-	$("#btn-fetch").click(function(){
-		fetchList();
+	$("#form-add").submit(function(event){
+		event.preventDefault();
+
+		var name = $('#input-name').val();
+		var password = $('#input-password').val();
+		var content = $('#tx-content').val();
+
+		$.ajax({
+		url: "/guestbook/api/add",
+		type: "post",
+		dataType: "json",
+		data: "name=" + name +
+				"&password=" + password +
+				"&message=" + content +
+				"&csrfmiddlewaretoken=" + $("input[name='csrfmiddlewaretoken']").val(),
+		success: function(response){
+			console.log(response);
+		},
+		error: function(jqXHR, status, e){
+			console.error(status + ":" + e);
+		}
 	});
+});
+	$(window).scroll(function(){
+		var $window = $(this);
+		var scrollTop = $window.scrollTop();
+		var windowHeight = $window.height();
+		var documentHeight = $(document).height();
+
+		if(scrollTop + windowHeight + 10 > documentHeight){
+			fetchList();
+		}
+	});
+	<!--첫번째 리스트 가져오기-->
+	fetchList();
 });
 </script>
 {% endblock %}
 
 {% block content %}
 			<div id="guestbook">
-				<form action="mysite/guestbook" method="post">
-					<input type="hidden" name="a" value="insert">
+				<form id="form-add" action="/guestbook/api/add" method="post">{% csrf_token %}
 					<table>
 						<tr>
-							<td>이름</td><td><input type="text" name="name"></td>
-							<td>비밀번호</td><td><input type="password" name="pass"></td>
+							<td>이름</td><td><input type="text" name="name" id="input-name"></td>
+							<td>비밀번호</td><td><input type="password" name="password" id="input-password"></td>
 						</tr>
 						<tr>
-							<td colspan=4><textarea name="message" id="content"></textarea></td>
+							<td colspan=4><textarea name="message" id="tx-content"></textarea></td>
 						</tr>
 						<tr>
 							<td colspan=4 align=right><input type="submit" VALUE=" 확인 "></td>
 						</tr>
 					</table>
 				</form>
-				<button id="btn-fetch">가져오기</button>
-				<ul id="message-list"></ul>
+				<ul id="message-list">
+					<!--가져온 데이터가 추가되는곳-->
+				</ul>
 			</div>
 {% endblock %}

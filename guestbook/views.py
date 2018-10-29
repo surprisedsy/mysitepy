@@ -1,3 +1,4 @@
+from django.forms import model_to_dict
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 
@@ -49,10 +50,10 @@ def ajax(request):
 
 def api_list(request):
     p = request.GET['p']
-    page = (int(p)-1) * 3
+    page = (int(p)-1) * 5
 
     result_list = []
-    results = Guestbook.objects.all().order_by('-id')[page:page+3]
+    results = Guestbook.objects.all().order_by('-id')[page:page+5]
     result_dict = results.values()
 
     for a in result_dict:
@@ -61,3 +62,23 @@ def api_list(request):
     data = {"results":result_list}
 
     return JsonResponse(data)
+
+def api_add(request):
+    guestbook = Guestbook()
+
+    guestbook.name = request.POST['name']
+    guestbook.password = request.POST['password']
+    guestbook.message = request.POST['message']
+
+    guestbook.save()
+
+    results = Guestbook.objects.filter(id=guestbook.id)
+
+    l = [];
+    for a in results.values():
+        l.append(a)
+
+    response = {'result' : 'success', 'data': l[0] }
+
+
+    return JsonResponse(response)
