@@ -6,7 +6,7 @@
 var page = 0;
 var isEnd = false;
 
-var render = function(guestbook){
+var render = function(guestbook, mode){
 	var htmls = "<li><table>" +
 				"<tr><td></td><td>" + guestbook.name +
 				"</td><td>" + guestbook.date +
@@ -14,7 +14,11 @@ var render = function(guestbook){
 				"<tr><td colspan='4'>" + guestbook.message +
 				"<br></td></tr>" +
 				"</table><br></li>";
-	$("#message-list").append(htmls);
+	if(mode == true){
+		$("#message-list").prepend(htmls);
+	} else{
+		$("#message-list").append(htmls);
+	}
 };
 var fetchList = function(){
 	if(isEnd == true){
@@ -30,7 +34,7 @@ var fetchList = function(){
 		success: function(response){
 			// rendering
 			$(response.results).each(function(index, guestbook){
-				render(guestbook);
+				render(guestbook, false);
 			});
 			// check isEnd
 			if(response.results.length < 5){
@@ -62,7 +66,9 @@ $(function(){
 				"&message=" + content +
 				"&csrfmiddlewaretoken=" + $("input[name='csrfmiddlewaretoken']").val(),
 		success: function(response){
-			console.log(response);
+			render(response.data, true);
+
+			$("#form-add")[0].reset();
 		},
 		error: function(jqXHR, status, e){
 			console.error(status + ":" + e);
